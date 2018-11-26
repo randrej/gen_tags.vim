@@ -138,7 +138,7 @@ Set location of global; a binary of gtags. The default is 'global'
 ------------------------------------------------------------------------------
 g:gen_tags#ctags_opts                            *g:gen_tags#ctags_opts*
 
-Set ctags options. The `-R` is set by default,
+Set ctags options. The `-R` is set by default if the executable isn't ptags,
 so there is no need to add `-R` in |g:gen_tags#ctags_opts|.
 
 |g:gen_tags#ctags_opts| is not defined by default.

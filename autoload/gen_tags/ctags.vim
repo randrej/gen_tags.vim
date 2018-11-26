@@ -62,6 +62,16 @@ function! s:is_universal_ctags() abort
   return s:ctags_version
 endfunction
 
+function! s:is_ptags() abort
+  if exists('s:ptags_version')
+    return s:ptags_version
+  endif
+
+  let s:ptags_version = system(g:gen_tags#ctags_bin . ' --version') =~? '\<ptags\>' ? 1 : 0
+
+  return s:ptags_version
+endfunction
+
 "Generate ctags tags and set tags option
 function! s:ctags_gen(filename, dir) abort
   "Check if current path in the blacklist
@@ -77,12 +87,14 @@ function! s:ctags_gen(filename, dir) abort
 
   let l:cmd = s:ctags_cmd_pre()
 
+  let l:option = s:is_ptags() ? '' : '-R'
+
   if empty(a:filename)
     let l:file = l:dir . '/' . s:ctags_db
-    let l:cmd += ['-f', l:file, '-R', expand(gen_tags#find_project_root())]
+    let l:cmd += ['-f', l:file, l:option, expand(gen_tags#find_project_root())]
   else
     let l:file = a:filename
-    let l:cmd += ['-f', l:file, '-R', expand(a:dir)]
+    let l:cmd += ['-f', l:file, l:option, expand(a:dir)]
   endif
 
   call gen_tags#job#system_async(l:cmd)
@@ -259,6 +271,9 @@ function! s:ctags_cmd_pre() abort
 
   "Extra flag in universal ctags, enable reference tags
   if s:is_universal_ctags()
+    if s:is_ptags()
+        let l:cmd += ['-c']
+    endif
     let l:cmd += ['--extras=+r']
   endif
 
