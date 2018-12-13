@@ -263,6 +263,7 @@ function! s:ctags_update(file) abort
 
   let l:cmd += ['-f', l:file, '-a', expand(a:file)]
 
+  echomsg(l:cmd)
   call gen_tags#job#system_async(l:cmd)
 endfunction
 
