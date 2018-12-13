@@ -97,7 +97,7 @@ function! s:ctags_gen(filename, dir) abort
     let l:cmd += ['-f', l:file, l:option, expand(a:dir)]
   endif
 
-  call gen_tags#echo('Running command: ' . l:cmd)
+  call gen_tags#echo('Running command: ' . join(l:cmd))
   call gen_tags#job#system_async(l:cmd)
 
   "Search for existence tags string.
@@ -264,7 +264,7 @@ function! s:ctags_update(file) abort
 
   let l:cmd += ['-f', l:file, '-a', expand(a:file)]
 
-  call gen_tags#echo('Running command: ' . l:cmd)
+  call gen_tags#echo('Running command: ' . join(l:cmd))
   call gen_tags#job#system_async(l:cmd)
 endfunction
 
